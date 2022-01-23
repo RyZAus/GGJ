@@ -55,19 +55,11 @@ namespace RileyMcGowan
         {
             if (Input.GetKeyDown(KeyCode.W))
             {
-                int arrayIndexCurrent = Array.IndexOf(possiblePaths, currentPath);
-                if (arrayIndexCurrent + 1 < possiblePaths.Length)
-                {
-                    ChangePath(possiblePaths[arrayIndexCurrent + 1]);
-                }
+                ChangePathUp();
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
-                int arrayIndexCurrent = Array.IndexOf(possiblePaths, currentPath);
-                if (arrayIndexCurrent - 1 >= 0)
-                {
-                    ChangePath(possiblePaths[arrayIndexCurrent - 1]);
-                }
+                ChangePathDown();
             }
             //If null, error
             if (pointInPath == null || pointInPath.Current == null)
@@ -86,6 +78,27 @@ namespace RileyMcGowan
             }
         }
 
+        #region Public Functions
+        public void ChangePathUp()
+        {
+            int arrayIndexCurrent = Array.IndexOf(possiblePaths, currentPath);
+            if (arrayIndexCurrent + 1 < possiblePaths.Length)
+            {
+                ChangePathSetup(possiblePaths[arrayIndexCurrent + 1]);
+            }
+        }
+
+        public void ChangePathDown()
+        {
+            int arrayIndexCurrent = Array.IndexOf(possiblePaths, currentPath);
+            if (arrayIndexCurrent - 1 >= 0)
+            {
+                ChangePathSetup(possiblePaths[arrayIndexCurrent - 1]);
+            }
+        }
+        #endregion
+
+        #region Private Functions
         private void SetupPath()
         {
             //Get our reference
@@ -95,12 +108,13 @@ namespace RileyMcGowan
             pointInPath.MoveNext();
         }
 
-        private void ChangePath(MovementPath path)
+        private void ChangePathSetup(MovementPath path)
         {
             int currentWaypoint = currentPath.movingTo;
             currentPath = path;
             currentPath.movingTo = currentWaypoint;
             SetupPath();
         }
+        #endregion
     }
 }
