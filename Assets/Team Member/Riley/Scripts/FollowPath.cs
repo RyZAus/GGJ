@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace RileyMcGowan
 {
@@ -11,6 +12,9 @@ namespace RileyMcGowan
 
         [Tooltip("Selected path allows lanes")]
         public MovementPath currentPath;
+
+        [Tooltip("All possible paths")]
+        public MovementPath[] possiblePaths;
 
         [Tooltip("Current speed of vehicle")] public float speed = 1;
 
@@ -34,11 +38,7 @@ namespace RileyMcGowan
                 return;
             }
 
-            //Get our reference
-            pointInPath = currentPath.GetPathPoint();
-
-            //Get next point
-            pointInPath.MoveNext();
+            SetupPath();
 
             //Error if no path
             if (pointInPath.Current == null)
@@ -53,6 +53,10 @@ namespace RileyMcGowan
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                ChangePath(possiblePaths[Random.Range(0, possiblePaths.Length)]);
+            }
             //If null, error
             if (pointInPath == null || pointInPath.Current == null)
             {
@@ -68,6 +72,23 @@ namespace RileyMcGowan
             {
                 pointInPath.MoveNext();
             }
+        }
+
+        private void SetupPath()
+        {
+            //Get our reference
+            pointInPath = currentPath.GetPathPoint();
+
+            //Get next point
+            pointInPath.MoveNext();
+        }
+
+        private void ChangePath(MovementPath path)
+        {
+            int currentWaypoint = currentPath.movingTo;
+            currentPath = path;
+            currentPath.movingTo = currentWaypoint;
+            SetupPath();
         }
     }
 }
