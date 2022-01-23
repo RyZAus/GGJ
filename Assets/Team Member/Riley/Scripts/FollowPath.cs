@@ -55,7 +55,19 @@ namespace RileyMcGowan
         {
             if (Input.GetKeyDown(KeyCode.W))
             {
-                ChangePath(possiblePaths[Random.Range(0, possiblePaths.Length)]);
+                int arrayIndexCurrent = Array.IndexOf(possiblePaths, currentPath);
+                if (arrayIndexCurrent + 1 < possiblePaths.Length)
+                {
+                    ChangePath(possiblePaths[arrayIndexCurrent + 1]);
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                int arrayIndexCurrent = Array.IndexOf(possiblePaths, currentPath);
+                if (arrayIndexCurrent - 1 >= 0)
+                {
+                    ChangePath(possiblePaths[arrayIndexCurrent - 1]);
+                }
             }
             //If null, error
             if (pointInPath == null || pointInPath.Current == null)
