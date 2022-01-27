@@ -26,6 +26,9 @@ namespace RileyMcGowan
         
         [Tooltip("Prevents swapping over unswappable sections")]
         public bool unableToSwap;
+        
+        [Tooltip("Is this player 1 controls")]
+        public bool player1Controls;
 
         #endregion
 
@@ -60,14 +63,29 @@ namespace RileyMcGowan
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.W))
+            if (player1Controls == true)
             {
-                ChangePathUp();
+                if (Input.GetKeyDown(KeyCode.W))
+                {
+                    ChangePathUp();
+                }
+                if (Input.GetKeyDown(KeyCode.S))
+                {
+                    ChangePathDown();
+                }
             }
-            if (Input.GetKeyDown(KeyCode.S))
+            else
             {
-                ChangePathDown();
+                if (Input.GetKeyDown(KeyCode.T))
+                {
+                    ChangePathUp();
+                }
+                if (Input.GetKeyDown(KeyCode.G))
+                {
+                    ChangePathDown();
+                }
             }
+            
             //If null, error
             if (pointInPath == null || pointInPath.Current == null)
             {
