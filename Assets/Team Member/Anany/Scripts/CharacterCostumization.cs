@@ -17,26 +17,63 @@ public class CharacterCostumization : MonoBehaviour
             {"Yellow", "FDFF00" },
             {"Pink", "FF009F" }
         };
-
+    private Dictionary<string, string> playersDic =
+        new Dictionary<string, string>()
+        {
+            {"Player 1", "0" },
+            {"Player 2", "1" }
+        };
+    private int playerID;
     private int mainColorID;
     private int accentColorID;
-
+    
+    [SerializeField] private TextMeshProUGUI playerText;
     [SerializeField] private TextMeshProUGUI mainColorText;
     [SerializeField] private TextMeshProUGUI accentColorText;
-
-
+    
     private void Awake()
     {
+        mainColorID = PlayerPrefs.GetInt("playerPref", 0);
         mainColorID = PlayerPrefs.GetInt("mainBody", 0);
         accentColorID = PlayerPrefs.GetInt("accents", 0);
     }
 
     private void Start()
     {
+        SetItem("player");
         SetItem("mainColor");
         SetItem("accentColor");
     }
+    
+    public void SelectPlayer(bool isForward)
+    {
+        if (isForward)
+        {
+            if (playerID >= playersDic.Count - 1)
+            {
+                playerID = 0;
+            }
+            else
+            {
+                playerID++;
+            }
+        }
+        else
+        {
+            if (playerID <= 0)
+            {
+                playerID = playersDic.Count - 1;
+            }
+            else
+            {
+                playerID--;
+            }
+        }
 
+        PlayerPrefs.SetInt("player", playerID);
+        SetItem("player");
+    }
+    
     public void SelectMainColor(bool isForward)
     {
         if (isForward)
@@ -91,6 +128,12 @@ public class CharacterCostumization : MonoBehaviour
     {
         switch (type)
         {
+            case "player":
+                string playerName = playersDic.Keys.ElementAt(playerID);
+                playerText.text = playerName.ToLower();
+
+                break;
+            
             case "mainColor":
                 string mainColorName = colors.Keys.ElementAt(mainColorID);
                 mainColorText.text = mainColorName.ToLower();
