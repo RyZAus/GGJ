@@ -9,8 +9,6 @@ namespace RileyMcGowan
     {
         #region Public Vars
 
-        [Tooltip("Our current Waypoint")]
-        public int movingTo = 0;
         [Tooltip("List of all possible Waypoints")]
         public Transform[] pathSequence;
 
@@ -34,7 +32,7 @@ namespace RileyMcGowan
             Gizmos.DrawLine(pathSequence[0].position, pathSequence[pathSequence.Length-1].position);
         }
 
-        public IEnumerator<Transform> GetPathPoint()
+        public IEnumerator<Transform> GetPathPoint(FollowPath currentPath)
         {
             //If we don't have any points, break
             if (pathSequence == null || pathSequence.Length < 1)
@@ -45,7 +43,7 @@ namespace RileyMcGowan
             while (true)
             {
                 //After reaching this, it will GetPathPoint
-                yield return pathSequence[movingTo];
+                yield return pathSequence[currentPath.movingPoint];
                 
                 //If the length is 1, return cause it's at the end
                 if (pathSequence.Length == 1)
@@ -54,12 +52,12 @@ namespace RileyMcGowan
                 }
                 
                 //Set direction forward (If we are point 1, we want 2)
-                movingTo = movingTo + 1;
+                currentPath.movingPoint = currentPath.movingPoint + 1;
                 
                 //If the resulting number is too high, reset to 0
-                if (movingTo >= pathSequence.Length)
+                if (currentPath.movingPoint >= pathSequence.Length)
                 {
-                    movingTo = 0;
+                    currentPath.movingPoint = 0;
                 }
             }
         }

@@ -21,10 +21,17 @@ namespace RileyMcGowan
         [Tooltip("How close to the waypoint to get")]
         public float maxDistanceToGoal = .1f;
 
+        [Tooltip("Allows us to correct the direction you are swapping")]
+        public bool flippedDirection;
+        
+        [Tooltip("Prevents swapping over unswappable sections")]
+        public bool unableToSwap;
+
         #endregion
 
         #region Private Vars
 
+        public int movingPoint = 0;
         private IEnumerator<Transform> pointInPath; //Gets the reference to the path point fed by MovementPath
 
         #endregion
@@ -79,7 +86,36 @@ namespace RileyMcGowan
         }
 
         #region Public Functions
-        public void ChangePathUp()
+        public void ChangePathUp() //CALL THIS UNLESS OTHERWISE ASKED
+        {
+            if (unableToSwap != true)
+            {
+                if (flippedDirection)
+                {
+                    ChangePathDownForced();
+                }
+                else
+                {
+                    ChangePathUpForced();
+                }
+            }
+        }
+        public void ChangePathDown() //CALL THIS UNLESS OTHERWISE ASKED
+        {
+            if (unableToSwap != true)
+            {
+                if (flippedDirection)
+                {
+                    ChangePathUpForced();
+                }
+                else
+                {
+                    ChangePathDownForced();
+                }
+            }
+        }
+        
+        public void ChangePathUpForced()
         {
             int arrayIndexCurrent = Array.IndexOf(possiblePaths, currentPath);
             if (arrayIndexCurrent + 1 < possiblePaths.Length)
@@ -88,7 +124,7 @@ namespace RileyMcGowan
             }
         }
 
-        public void ChangePathDown()
+        public void ChangePathDownForced()
         {
             int arrayIndexCurrent = Array.IndexOf(possiblePaths, currentPath);
             if (arrayIndexCurrent - 1 >= 0)
@@ -102,17 +138,15 @@ namespace RileyMcGowan
         private void SetupPath()
         {
             //Get our reference
-            pointInPath = currentPath.GetPathPoint();
-
+            pointInPath = currentPath.GetPathPoint(this);
+            
             //Get next point
             pointInPath.MoveNext();
         }
 
         private void ChangePathSetup(MovementPath path)
         {
-            int currentWaypoint = currentPath.movingTo;
             currentPath = path;
-            currentPath.movingTo = currentWaypoint;
             SetupPath();
         }
         #endregion
