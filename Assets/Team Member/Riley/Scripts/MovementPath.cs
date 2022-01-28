@@ -57,6 +57,7 @@ namespace RileyMcGowan
                 //If the resulting number is too high, reset to 0
                 if (currentPath.movingPoint >= pathSequence.Length)
                 {
+                    currentPath.lap += 1;
                     currentPath.movingPoint = 0;
                 }
             }

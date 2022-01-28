@@ -30,11 +30,15 @@ namespace RileyMcGowan
         [Tooltip("Is this player 1 controls")]
         public bool player1Controls;
 
+        public int movingPoint = 0;
+        public float percentCompleted;
+        public int lap = 0;
         #endregion
 
         #region Private Vars
 
-        public int movingPoint = 0;
+        private float percentPerWaypoint;
+        private float percentDistance;
         private IEnumerator<Transform> pointInPath; //Gets the reference to the path point fed by MovementPath
 
         #endregion
@@ -57,6 +61,9 @@ namespace RileyMcGowan
                 return;
             }
 
+            //Split the percentage between each waypoint
+            percentPerWaypoint = 100f / currentPath.pathSequence.Length;
+            
             //Set our initial position
             transform.position = pointInPath.Current.position;
         }
@@ -94,12 +101,19 @@ namespace RileyMcGowan
             }
 
             //Take the position, and the current target position, then use speed with time to move
-            transform.position =
-                Vector3.MoveTowards(transform.position, pointInPath.Current.position, Time.deltaTime * speed);
+            transform.position = Vector3.MoveTowards(transform.position, pointInPath.Current.position, Time.deltaTime * speed);
+            
+            //Get a distance between the ship and the next waypoint
             var distanceSquared = (transform.position - pointInPath.Current.position).sqrMagnitude;
+            
+            //Use the distance and compair the full distance for a percentage of the completed waypoint
+            percentCompleted = (percentPerWaypoint * movingPoint) + ((1 - (distanceSquared/percentDistance)) * percentPerWaypoint);
+            
+            //If the distance has reached the waypoint move on
             if (distanceSquared < maxDistanceToGoal * maxDistanceToGoal)
             {
                 pointInPath.MoveNext();
+                percentDistance = (transform.position - pointInPath.Current.position).sqrMagnitude;
             }
         }
 
@@ -160,6 +174,7 @@ namespace RileyMcGowan
             
             //Get next point
             pointInPath.MoveNext();
+            percentDistance = (transform.position - pointInPath.Current.position).sqrMagnitude;
         }
 
         private void ChangePathSetup(MovementPath path)
