@@ -101,20 +101,12 @@ namespace RileyMcGowan
                 {
                     ChangePathUp();
                 }
-                if (Input.GetKeyDown(KeyCode.S))
-                {
-                    ChangePathDown();
-                }
             }
             else
             {
                 if (Input.GetKeyDown(KeyCode.UpArrow))
                 {
                     ChangePathUp();
-                }
-                if (Input.GetKeyDown(KeyCode.DownArrow))
-                {
-                    ChangePathDown();
                 }
             }
             
@@ -184,6 +176,10 @@ namespace RileyMcGowan
                 }
                 ChangePathSetup(possiblePaths[arrayIndexCurrent + 1]);
             }
+            else
+            {
+                ChangePathDownForced()
+            }
         }
 
         public void ChangePathDownForced()
@@ -196,6 +192,10 @@ namespace RileyMcGowan
                     StartCoroutine(HitPlayerTimer());
                 }
                 ChangePathSetup(possiblePaths[arrayIndexCurrent - 1]);
+            }
+            else
+            {
+                ChangePathUpForced();
             }
         }
         #endregion
