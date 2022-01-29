@@ -60,6 +60,10 @@ namespace RileyMcGowan
                         {
                             firstPlaceShip = ships[1].gameObject;
                         }
+                        else if (firstPlaceShip == null)
+                        {
+                            firstPlaceShip = ships[0].gameObject;
+                        }
                     }
                 }
                 //Stop the camera running constantly
@@ -73,7 +77,6 @@ namespace RileyMcGowan
             transform.position = Vector3.SmoothDamp(transform.position, destination, ref cameraVelocity, smoothTime);
         }
         #endregion
-        
 
         #region CoRoutines
         IEnumerator CameraTimer()

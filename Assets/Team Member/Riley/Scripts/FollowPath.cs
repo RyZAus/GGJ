@@ -38,6 +38,7 @@ namespace RileyMcGowan
         #region Private Vars
 
         private float percentPerWaypoint;
+        private ObjectHit thisObjectsHit;
         private float percentDistance;
         private IEnumerator<Transform> pointInPath; //Gets the reference to the path point fed by MovementPath
 
@@ -59,6 +60,15 @@ namespace RileyMcGowan
             {
                 Debug.LogError("No Path - F2", gameObject);
                 return;
+            }
+
+            if (GetComponent<ObjectHit>() != null)
+            {
+                thisObjectsHit = GetComponent<ObjectHit>();
+            }
+            else
+            {
+                Debug.LogError(this + " does not contain ObjectHit!");
             }
 
             //Split the percentage between each waypoint
@@ -83,11 +93,11 @@ namespace RileyMcGowan
             }
             else
             {
-                if (Input.GetKeyDown(KeyCode.T))
+                if (Input.GetKeyDown(KeyCode.UpArrow))
                 {
                     ChangePathUp();
                 }
-                if (Input.GetKeyDown(KeyCode.G))
+                if (Input.GetKeyDown(KeyCode.DownArrow))
                 {
                     ChangePathDown();
                 }
@@ -152,6 +162,10 @@ namespace RileyMcGowan
             int arrayIndexCurrent = Array.IndexOf(possiblePaths, currentPath);
             if (arrayIndexCurrent + 1 < possiblePaths.Length)
             {
+                if (thisObjectsHit.hittable != true)
+                {
+                    StartCoroutine(HitPlayerTimer());
+                }
                 ChangePathSetup(possiblePaths[arrayIndexCurrent + 1]);
             }
         }
@@ -161,6 +175,10 @@ namespace RileyMcGowan
             int arrayIndexCurrent = Array.IndexOf(possiblePaths, currentPath);
             if (arrayIndexCurrent - 1 >= 0)
             {
+                if (thisObjectsHit.hittable != true)
+                {
+                    StartCoroutine(HitPlayerTimer());
+                }
                 ChangePathSetup(possiblePaths[arrayIndexCurrent - 1]);
             }
         }
@@ -181,6 +199,15 @@ namespace RileyMcGowan
         {
             currentPath = path;
             SetupPath();
+        }
+        #endregion
+
+        #region CoRoutines
+        IEnumerator HitPlayerTimer()
+        {
+            thisObjectsHit.hittable = true;
+            yield return new WaitForSeconds(1f);
+            thisObjectsHit.hittable = false;
         }
         #endregion
     }
