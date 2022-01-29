@@ -30,6 +30,9 @@ namespace RileyMcGowan
         [Tooltip("Is this player 1 controls")]
         public bool player1Controls;
 
+        [Tooltip("Is this a non player object")]
+        public bool objectNonPlayer;
+        
         public int movingPoint = 0;
         public float percentCompleted;
         public int lap = 0;
@@ -47,10 +50,22 @@ namespace RileyMcGowan
         private void Start()
         {
             //Error if no path
-            if (currentPath == null)
+            if (currentPath == null && objectNonPlayer != true)
             {
                 Debug.LogError("No Path - F1", gameObject);
                 return;
+            }
+            else if (objectNonPlayer == true)
+            {
+                PathType[] paths = FindObjectsOfType<PathType>();
+                foreach (PathType path in paths)
+                {
+                    if (path.thisPath == PathType.TypesOfPaths.RockPath)
+                    {
+                        possiblePaths[0] = path.GetComponent<MovementPath>();
+                        currentPath = path.GetComponent<MovementPath>();
+                    }
+                }
             }
 
             SetupPath();
@@ -66,7 +81,7 @@ namespace RileyMcGowan
             {
                 thisObjectsHit = GetComponent<ObjectHit>();
             }
-            else
+            else if (objectNonPlayer == false)
             {
                 Debug.LogError(this + " does not contain ObjectHit!");
             }
@@ -112,6 +127,7 @@ namespace RileyMcGowan
 
             //Take the position, and the current target position, then use speed with time to move
             transform.position = Vector3.MoveTowards(transform.position, pointInPath.Current.position, Time.deltaTime * speed);
+            transform.LookAt(pointInPath.Current.position);
             
             //Get a distance between the ship and the next waypoint
             var distanceSquared = (transform.position - pointInPath.Current.position).sqrMagnitude;
