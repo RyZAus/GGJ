@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Linq;
+using UnityEngine.UI;
 
 public class CharacterCostumization : MonoBehaviour
 {
@@ -27,9 +28,9 @@ public class CharacterCostumization : MonoBehaviour
     private int mainColorID;
     private int accentColorID;
     
-    [SerializeField] private TextMeshProUGUI playerText;
-    [SerializeField] private TextMeshProUGUI mainColorText;
-    [SerializeField] private TextMeshProUGUI accentColorText;
+    [SerializeField] private Text playerText;
+    [SerializeField] private Text mainColorText;
+    [SerializeField] private Text accentColorText;
     
     private void Awake()
     {
@@ -91,7 +92,14 @@ public class CharacterCostumization : MonoBehaviour
 
         else
         {
-            mainColorID--;
+            if (mainColorID <= 0)
+            {
+                mainColorID = colors.Count - 1;
+            }
+            else
+            {
+                mainColorID--;
+            }
         }
 
         PlayerPrefs.SetInt("mainColor", mainColorID);
@@ -115,7 +123,14 @@ public class CharacterCostumization : MonoBehaviour
 
         else
         {
-            accentColorID--;
+            if (accentColorID <= 0)
+            {
+                accentColorID = colors.Count - 1;
+            }
+            else
+            {
+                accentColorID--;
+            }
         }
 
         PlayerPrefs.SetInt("accentColor", accentColorID);
