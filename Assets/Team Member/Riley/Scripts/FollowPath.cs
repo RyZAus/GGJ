@@ -99,14 +99,14 @@ namespace RileyMcGowan
             {
                 if (Input.GetKeyDown(KeyCode.W))
                 {
-                    ChangePathUp();
+                    ChangePath();
                 }
             }
             else
             {
                 if (Input.GetKeyDown(KeyCode.UpArrow))
                 {
-                    ChangePathUp();
+                    ChangePath();
                 }
             }
             
@@ -136,66 +136,27 @@ namespace RileyMcGowan
         }
 
         #region Public Functions
-        public void ChangePathUp() //CALL THIS UNLESS OTHERWISE ASKED
+        public void ChangePath()
         {
             if (unableToSwap != true)
             {
-                if (flippedDirection)
+                int arrayIndexCurrent = Array.IndexOf(possiblePaths, currentPath);
+                if (arrayIndexCurrent + 1 < possiblePaths.Length)
                 {
-                    ChangePathDownForced();
+                    if (thisObjectsHit.hittable != true)
+                    {
+                        StartCoroutine(HitPlayerTimer());
+                    }
+                    ChangePathSetup(possiblePaths[arrayIndexCurrent + 1]);
                 }
-                else
+                else if (arrayIndexCurrent - 1 >= 0)
                 {
-                    ChangePathUpForced();
+                    if (thisObjectsHit.hittable != true)
+                    {
+                        StartCoroutine(HitPlayerTimer());
+                    }
+                    ChangePathSetup(possiblePaths[arrayIndexCurrent - 1]);
                 }
-            }
-        }
-        public void ChangePathDown() //CALL THIS UNLESS OTHERWISE ASKED
-        {
-            if (unableToSwap != true)
-            {
-                if (flippedDirection)
-                {
-                    ChangePathUpForced();
-                }
-                else
-                {
-                    ChangePathDownForced();
-                }
-            }
-        }
-        
-        public void ChangePathUpForced()
-        {
-            int arrayIndexCurrent = Array.IndexOf(possiblePaths, currentPath);
-            if (arrayIndexCurrent + 1 < possiblePaths.Length)
-            {
-                if (thisObjectsHit.hittable != true)
-                {
-                    StartCoroutine(HitPlayerTimer());
-                }
-                ChangePathSetup(possiblePaths[arrayIndexCurrent + 1]);
-            }
-            else
-            {
-                ChangePathDownForced()
-            }
-        }
-
-        public void ChangePathDownForced()
-        {
-            int arrayIndexCurrent = Array.IndexOf(possiblePaths, currentPath);
-            if (arrayIndexCurrent - 1 >= 0)
-            {
-                if (thisObjectsHit.hittable != true)
-                {
-                    StartCoroutine(HitPlayerTimer());
-                }
-                ChangePathSetup(possiblePaths[arrayIndexCurrent - 1]);
-            }
-            else
-            {
-                ChangePathUpForced();
             }
         }
         #endregion
