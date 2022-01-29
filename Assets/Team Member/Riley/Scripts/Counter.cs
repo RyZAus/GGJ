@@ -50,7 +50,7 @@ namespace RileyMcGowan
         {
             while (true)
             {
-                yield return new WaitForSeconds(5);
+                yield return new WaitForSeconds(1);
                 GameObject losePlayer = gameObject.GetComponent<FollowPath>().gameObject;
                 players.Remove(gameObject.GetComponent<FollowPath>());
                 FinishGame(players[0].gameObject, losePlayer);
