@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Team Member/Anany/Scenes/CustomizationMenu.unity
-    guid: c91366c2ed1f5024abbfbcb4d364e33d
+    path: Assets/Team Member/Jonas/Menus.unity
+    guid: 8f49c79da0293e4468b8e0730b169c4c
   - enabled: 1
     path: Assets/Scenes/Level-1.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
